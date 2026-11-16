@@ -1,0 +1,48 @@
+name: Update version numbers
+description: Update the project README and Skylite documentation with a new published version.
+
+inputs:
+  group:
+    description: Maven group ID.
+    required: true
+  artifact:
+    description: Maven artifact ID.
+    required: true
+  version:
+    description: Published version to write into the installation examples.
+    required: true
+  docs_token:
+    description: Token with contents write access to the documentation repository.
+    required: true
+  docs_repository:
+    description: Documentation repository in owner/name form.
+    required: false
+    default: mudkjp/docs.skylite.gg
+  docs_branch:
+    description: Documentation branch to update.
+    required: false
+    default: main
+  docs_directory:
+    description: Documentation directory containing the artifact page.
+    required: false
+    default: libraries
+  source_readme:
+    description: README path in the releasing repository.
+    required: false
+    default: .github/README.md
+
+runs:
+  using: composite
+  steps:
+    - name: Update project and documentation versions
+      shell: bash
+      env:
+        UPDATE_VERSION_GROUP: ${{ inputs.group }}
+        UPDATE_VERSION_ARTIFACT: ${{ inputs.artifact }}
+        UPDATE_VERSION_VERSION: ${{ inputs.version }}
+        UPDATE_VERSION_DOCS_TOKEN: ${{ inputs.docs_token }}
+        UPDATE_VERSION_DOCS_REPOSITORY: ${{ inputs.docs_repository }}
+        UPDATE_VERSION_DOCS_BRANCH: ${{ inputs.docs_branch }}
+        UPDATE_VERSION_DOCS_DIRECTORY: ${{ inputs.docs_directory }}
+        UPDATE_VERSION_SOURCE_README: ${{ inputs.source_readme }}
+      run: bash "${{ github.action_path }}/update-version-numbers.sh"
